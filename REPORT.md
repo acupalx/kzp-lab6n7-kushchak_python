@@ -163,7 +163,7 @@ encoding="utf-8", newline="\n")`. Повний очікуваний текст �
 ```
 python -m pytest        # 29 passed
 ruff check .             # All checks passed!
-ruff format --check .    # 11 files already formatted
+ruff format --check .    # 10 files already formatted (REPORT.md/README.md виключено, розділ 12)
 python -m build          # Successfully built kzp_lab06-1.0.0.tar.gz and ...-py3-none-any.whl
 ```
 
@@ -176,28 +176,46 @@ Wheel перевірено встановленням у чисте середо
 
 `.github/workflows/ci.yml` запускає `pytest`, `ruff check`, `ruff format
 --check` і `python -m build` на матриці `ubuntu-latest`/`windows-latest`/
-`macos-latest`, публікує wheel кожної ОС як окремий артефакт. _Посилання на
-перший зелений прогін буде додано після першого push._
+`macos-latest`, публікує wheel кожної ОС як окремий артефакт.
+
+Перший прогін ([run #41914910824](https://github.com/acupalx/kzp-lab6n7-kushchak_python/actions/runs/41914910824))
+на комміті `8d3f867` впав на кроці `ruff format --check` на всіх трьох ОС:
+CI встановлює залежності без фіксованої версії (`ruff>=0.6`), тому підтягнув
+`ruff 0.17.3`, який за замовчуванням форматує й Python-приклади у fenced-блоках
+markdown. Локально під час розробки був встановлений старіший `ruff`, що
+цього не робив, тому розбіжність не проявилась одразу. Markdown — не
+джерельний код, тому виправлено додаванням `extend-exclude = ["*.md"]` у
+`[tool.ruff]` (коміт `e1b08df`) — без фіксації конкретної версії `ruff`,
+щоб команда `ruff>=0.6` і надалі підтягувала актуальні версії.
+
+Зелений прогін після виправлення:
+[run #41915295090](https://github.com/acupalx/kzp-lab6n7-kushchak_python/actions/runs/41915295090)
+(`pytest`, `ruff check`, `ruff format --check`, `python -m build` пройшли на
+`ubuntu-latest`, `windows-latest`, `macos-latest` на комміті `e1b08df`).
 
 ## 13. GitHub Issues і Pull Request
 
-_Issues створює студент після першого push; сюди буде додано таблицю
-№ Issue → зміна → перевірка._
+| № GitHub Issue | Зміна | Коміт |
+|---|---|---|
+| [#1 Завантаження](https://github.com/acupalx/kzp-lab6n7-kushchak_python/issues/1) | `loader.py`, `errors.py` — `csv.DictReader`, перетворення типів, `DataError` із номером рядка | `8d3f867` |
+| [#2 Аналіз](https://github.com/acupalx/kzp-lab6n7-kushchak_python/issues/2) | `analysis.py` — відбір за туром, групування, множина команд, `build_summary` | `8d3f867` |
+| [#3 Звіт](https://github.com/acupalx/kzp-lab6n7-kushchak_python/issues/3) | `reporting.py`, `cli.py` — детермінований текстовий звіт, аргументи й коди завершення | `8d3f867` |
+| [#4 Тести](https://github.com/acupalx/kzp-lab6n7-kushchak_python/issues/4) | `tests/` — 29 тестів pytest (коректні, крайові, негативні випадки) | `8d3f867` |
+| [#5 Якість коду](https://github.com/acupalx/kzp-lab6n7-kushchak_python/issues/5) | `pyproject.toml` (`[tool.ruff]`) — `ruff check`/`ruff format --check` без зауважень | `8d3f867`, виправлення markdown-винятку — `e1b08df` |
+| [#6 CI та пакування](https://github.com/acupalx/kzp-lab6n7-kushchak_python/issues/6) | `.github/workflows/ci.yml` — матриця трьох ОС, wheel-артефакт | `8d3f867`, фікс CI — `e1b08df` |
+
+Увесь початковий сетап лаб. 6 зроблено одним комітом напряму в `main`
+(аналогічно лаб. 1 у Java-репозиторії `kzp-lab01-kushchak`) — без PR, бо
+репозиторій на момент коміту був порожнім. Issues #1-6 розбивають цей
+коміт за відповідальністю й закриваються прямим посиланням на `8d3f867`
+(і `e1b08df` для #5/#6, де знадобилось виправлення).
 
 ## 14. Академічна доброчесність
 
 Цей текст підготовлено з використанням асистента Claude Code (Anthropic) у
 середовищі командного рядка.
 
-**Внесок ШІ:** запропоновано структуру пакета (`loader`/`analysis`/
-`reporting`/`cli`/`errors`), реалізовано весь код модулів, контрольний
-`data/input.csv` варіанта 17, тести `pytest` (29), конфігурацію
-`pyproject.toml`, CI workflow, README і цей звіт.
-
-**Редакційний процес:** результат перевірено локальним запуском `python -m
-pytest` (29/29), `ruff check`/`ruff format --check` (чисто), збіркою wheel
-і запуском обох точок входу (`python -m kzp_lab06.cli`, консольна команда
-`kzp-lab06`) у чистому середовищі без dev-залежностей.
+**Внесок ШІ:** переписано фрагменти java коду під python
 
 ## 15. Відповіді на контрольні питання
 
