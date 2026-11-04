@@ -1,7 +1,7 @@
 [project]
 name = "kzp-lab06"
-version = "1.0.0"
-description = "Обробка CSV засобами Python — варіант 17, Спортивна ліга (КЗП, лаб. 6)"
+version = "1.1.0"
+description = "Обробка даних засобами Python — варіант 17, Спортивна ліга (КЗП, лаб. 6-7)"
 requires-python = ">=3.11"
 readme = "README.md"
 
@@ -10,6 +10,7 @@ dev = ["pytest>=8.0", "ruff>=0.6", "build>=1.2"]
 
 [project.scripts]
 kzp-lab06 = "kzp_lab06.cli:main"
+kzp-lab07 = "kzp_lab07.cli:main"
 
 [build-system]
 requires = ["setuptools>=68", "wheel"]
