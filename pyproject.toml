@@ -1,0 +1,29 @@
+[project]
+name = "kzp-lab06"
+version = "1.0.0"
+description = "Обробка CSV засобами Python — варіант 17, Спортивна ліга (КЗП, лаб. 6)"
+requires-python = ">=3.11"
+readme = "README.md"
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.6", "build>=1.2"]
+
+[project.scripts]
+kzp-lab06 = "kzp_lab06.cli:main"
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

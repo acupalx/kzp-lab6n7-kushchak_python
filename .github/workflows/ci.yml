@@ -1,0 +1,54 @@
+# Один workflow перевіряє однаковий commit на трьох операційних системах.
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      # Отримуємо код commit або Pull Request.
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Встановлюємо однакову версію Python і кешуємо pip-залежності.
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      # Пакет і dev-залежності (pytest, ruff, build) з одного pyproject.toml.
+      - name: Install package with dev dependencies
+        run: python -m pip install -e ".[dev]"
+
+      - name: Run tests
+        run: python -m pytest
+
+      - name: Check lint
+        run: ruff check .
+
+      - name: Check formatting
+        run: ruff format --check .
+
+      - name: Build wheel
+        run: python -m build
+
+      # Кожна ОС отримує власний артефакт, щоб результати не перезаписувалися.
+      - name: Upload wheel
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheel-${{ matrix.os }}-${{ github.run_number }}
+          path: dist/*.whl
+          if-no-files-found: error
