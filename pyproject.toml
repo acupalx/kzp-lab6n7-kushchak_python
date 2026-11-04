@@ -21,6 +21,9 @@ where = ["src"]
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+# Markdown не є джерельним кодом: без цього новіші ruff форматують і код
+# у прикладах README.md/REPORT.md, що ламає CI при оновленні версії ruff.
+extend-exclude = ["*.md"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
