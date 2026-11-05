@@ -1,6 +1,6 @@
-# Спортивна ліга — обробка CSV засобами Python
+# Спортивна ліга — обробка даних засобами Python
 
-Лабораторна робота № 6 з курсу «Кросплатформні засоби програмування».
+Лабораторні роботи № 6-7 з курсу «Кросплатформні засоби програмування».
 Варіант 17.
 
 ## Призначення
@@ -65,3 +65,44 @@ kzp-lab06 data/input.csv reports/summary.txt
 
 CLI повертає `0` після успіху, `1` для помилки даних чи файлової системи,
 `2` для неправильної кількості аргументів.
+
+## Об'єктна модель (лабораторна робота № 7)
+
+Пакет `kzp_lab07` перебудовує лаб. 6 на об'єкти: той самий домен і ті самі
+показники (`total_goals`, `max_score_difference`, `count_by_round`,
+`unique_teams` — тепер через атрибути об'єктів, а не ключі словника;
+еквівалентність зі старими числами доведена тестом
+`tests/test_legacy_equivalence.py`), плюс нова турнірна таблиця.
+
+Формат входу розширено одним полем відносно лаб. 6 — `kind` (`group` або
+`playoff`), за яким `loader` обирає підтип:
+
+```
+home,away,date,home_score,away_score,round,kind
+```
+
+```
+src/kzp_lab07/
+├── __init__.py       # публічний API
+├── errors.py          # DataError
+├── models.py           # Match (@property round, __str__/__repr__/__eq__),
+│                         GroupMatch/PlayoffMatch, Protocol PointsEarning, TeamStanding
+├── loader.py            # CSV -> об'єкти відповідного підтипу
+├── analysis.py           # перенесені показники лаб. 6 + build_standings
+├── reporting.py           # текстовий звіт із турнірною таблицею
+└── cli.py                 # той самий контракт CLI, що й у лаб. 6
+data/matches.csv          # контрольний набір: 8 матчів групи (ті самі, що в лаб. 6) + 2 плей-офф
+```
+
+`Match` — базовий клас зі спільним станом і властивістю `round` (setter
+відхиляє значення менше 1). `GroupMatch` (нічия дозволена, очки 3/1/0) і
+`PlayoffMatch` (нічия заборонена, переможець отримує 2 очки) по-різному
+реалізують `points()` — єдину спільну операцію, яку викликає
+`analysis.build_standings` через протокол `PointsEarning`, не перевіряючи
+конкретний підтип.
+
+```bash
+python -m kzp_lab07.cli data/matches.csv reports/standings.txt
+# або, якщо пакет встановлено:
+kzp-lab07 data/matches.csv reports/standings.txt
+```
