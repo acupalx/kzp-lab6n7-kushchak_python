@@ -156,13 +156,27 @@ Wheel одного проєкту містить обидва пакети; пе
 чисте середовище без dev-залежностей — обидві консольні команди
 (`kzp-lab06`, `kzp-lab07`) відпрацювали з кодом `0`.
 
-GitHub Actions: _посилання на зелений прогін CI буде додано після push гілки
-й відкриття Pull Request._
+GitHub Actions підтвердив кросплатформність на трьох ОС після мерджу в
+`main` — успішний запуск CI:
+[run #42010732663](https://github.com/acupalx/kzp-lab6n7-kushchak_python/actions/runs/42010732663)
+(`pytest`, `ruff check`, `ruff format --check`, `python -m build` пройшли на
+`ubuntu-latest`, `windows-latest`, `macos-latest` на мердж-коміті `a343579`).
 
 ## 10. GitHub Issues і Pull Request
 
-_Issues створює студент; після створення й мерджу сюди буде додано таблицю
-№ Issue → зміна → перевірка, так само як у лаб. 6._
+| № GitHub Issue | Зміна | Коміт або PR |
+|---|---|---|
+| [#7 Модель](https://github.com/acupalx/kzp-lab6n7-kushchak_python/issues/7) | `models.py` — базовий клас `Match`: інваріанти, `__str__`/`__repr__`/`__eq__` | PR [#13](https://github.com/acupalx/kzp-lab6n7-kushchak_python/pull/13), `Closes #7` |
+| [#8 Властивості](https://github.com/acupalx/kzp-lab6n7-kushchak_python/issues/8) | `models.py` — `@property round` із setter-валідацією | PR #13, `Closes #8` |
+| [#9 Dataclass](https://github.com/acupalx/kzp-lab6n7-kushchak_python/issues/9) | `models.py` — `@dataclass(frozen=True) TeamStanding` | PR #13, `Closes #9` |
+| [#10 Підтипи](https://github.com/acupalx/kzp-lab6n7-kushchak_python/issues/10) | `models.py`, `analysis.py` — `GroupMatch`/`PlayoffMatch`, `Protocol PointsEarning`, `build_standings` | PR #13, `Closes #10` |
+| [#11 Тести](https://github.com/acupalx/kzp-lab6n7-kushchak_python/issues/11) | `tests/` — 42 нові тести, зокрема `test_legacy_equivalence.py` | PR #13, `Closes #11` |
+| [#12 Документація](https://github.com/acupalx/kzp-lab6n7-kushchak_python/issues/12) | `README.md`, `REPORT.md`, `pyproject.toml` (два пакети, версія `1.1.0`) | PR #13, `Closes #12` (дозаповнення цього розділу) |
+
+Pull Request [#13](https://github.com/acupalx/kzp-lab6n7-kushchak_python/pull/13)
+з гілки `lab07/oop-model` пройшов зелений CI на трьох ОС і змерджений у
+`main` (`a343579`), закривши issues #7-#11 автоматично через `Closes #N` в
+описі; issue #12 закривається окремим комітом, що дозаповнює цей розділ.
 
 ## 11. Академічна доброчесність
 
